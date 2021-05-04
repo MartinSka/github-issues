@@ -1,3 +1,18 @@
+# Create single page application that allows to browse GitHub issues.
+
+## Requirements
+
+- User should be able to provide GitHub organization and
+- Pagination is used to navigate between pages
+
+### Environment Variables
+
+After cloning, create a .env file and add required environmental variables.
+
+- REACT_APP_GITHUB_TOKEN. [Personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) to increase the request limit on GitHub
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
