@@ -1,24 +1,45 @@
+import { screen } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
+import { useIssues } from "./hooks/useIssues";
+import { useIssue } from "./hooks/useIssue";
 import { render } from "./test-utils";
 import App from "./App";
-import { useIssues } from "./hooks/useIssues";
 
 jest.mock("./hooks/useIssues");
-const mockedDependency = useIssues as jest.MockedFunction<any>;
+const useIssuesMocked = useIssues as jest.MockedFunction<any>;
+
+jest.mock("./hooks/useIssue");
+const useIssueMocked = useIssue as jest.MockedFunction<any>;
 
 describe("App Component", () => {
-  test("renders loading status", async () => {
-    mockedDependency.mockReturnValue({ status: "loading" });
-    const { getByText } = render(<App />);
+  test("full app rendering", () => {
+    useIssuesMocked.mockReturnValue({});
+    const history = createMemoryHistory();
 
-    const header = getByText(/loading/i);
-    expect(header).toBeInTheDocument();
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    expect(screen.getByText(/bookmarked issues/i)).toBeInTheDocument();
   });
 
-  test("renders error status", async () => {
-    mockedDependency.mockReturnValue({ status: "error" });
-    const { getByText } = render(<App />);
+  test("issue details rendering", () => {
+    useIssueMocked.mockReturnValue({
+      status: "success",
+      data: { title: "mock issue", user: { login: "test user" } },
+    });
 
-    const header = getByText(/Oops something went wrong/i);
-    expect(header).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push("/organization/repository/issues/id");
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    expect(screen.getByText(/mock issue/i)).toBeInTheDocument();
   });
 });

@@ -36,6 +36,14 @@ export interface IssueResponseError {
 }
 
 export enum State {
+  all = "all",
   open = "open",
   closed = "closed",
+}
+
+export enum Sort {
+  initial = "",
+  created = "created",
+  updated = "updated",
+  comments = "comments",
 }
